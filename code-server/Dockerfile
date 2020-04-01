@@ -72,20 +72,20 @@ RUN cd /tmp && wget https://github.com/cdr/code-server/releases/download/3.0.1/c
   ln -s /usr/local/lib/code-server/code-server /usr/local/bin/code-server
 
 # Setup User
-RUN groupadd -r diogo \
-    && useradd -m -r diogo -g diogo -s /bin/bash \
-    && echo "diogo ALL=(ALL) NOPASSWD:ALL" >> /etc/sudoers.d/nopasswd
-USER diogo 
+RUN groupadd -r diogo.monica \
+    && useradd -m -r diogo.monica -g diogo.monica -s /bin/bash \
+    && echo "diogo.monica ALL=(ALL) NOPASSWD:ALL" >> /etc/sudoers.d/nopasswd
+USER diogo.monica
 
 # Setup User Go Environment
-ENV PATH "${PATH}:/usr/local/go/bin:/home/diogo/go/bin"
+ENV PATH "${PATH}:/usr/local/go/bin:/home/diogo.monica/go/bin"
 
 # Setup User Visual Studio Code Extentions
-ENV VSCODE_USER "/home/diogo/.local/share/code-server/User"
-ENV VSCODE_EXTENSIONS "/home/diogo/.local/share/code-server/extensions"
+ENV VSCODE_USER "/home/diogo.monica/.local/share/code-server/User"
+ENV VSCODE_EXTENSIONS "/home/diogo.monica/.local/share/code-server/extensions"
 
 RUN mkdir -p ${VSCODE_USER}
-COPY --chown=diogo:diogo settings.json /home/diogo/.local/share/code-server/User/
+COPY --chown=diogo.monica:diogo.monica settings.json /home/diogo.monica/.local/share/code-server/User/
 
 # Setup Go Extension
 RUN mkdir -p ${VSCODE_EXTENSIONS}/go \
@@ -112,10 +112,10 @@ RUN mkdir -p ${VSCODE_EXTENSIONS}/browser-preview \
     && curl -JLs https://marketplace.visualstudio.com/_apis/public/gallery/publishers/auchenberg/vsextensions/vscode-browser-preview/latest/vspackage | bsdtar --strip-components=1 -xf - -C ${VSCODE_EXTENSIONS}/browser-preview extension
 
 # Setup User Workspace
-RUN mkdir -p /home/diogo/projects
-WORKDIR /home/diogo/
+RUN mkdir -p /home/diogo.monica/projects
+WORKDIR /home/diogo.monica/
 
-COPY --chown=diogo:diogo examples /home/diogo/examples
+COPY --chown=diogo.monica:diogo.monica examples /home/diogo.monica/examples
 
 EXPOSE 8080
 
