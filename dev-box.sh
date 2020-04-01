@@ -118,17 +118,6 @@ sudo tee >/dev/null /etc/cron.d/idlecheck <<EOF
 0 * * * * root /usr/local/bin/idlecheck.sh
 EOF
 
-curl https://pyenv.run | bash
-
-exec "$SHELL"
-
-cat <<EOF >> ~/.bashrc
-export PATH="\$HOME/.pyenv/bin:\$PATH"
-eval "\$(pyenv init -)"
-eval "\$(pyenv virtualenv-init -)"
-EOF
-
-pyenv install 3.8.2
 git config --global user.name "Diogo Monica"
 git config --global user.email "diogo.monica@gmail.com"
 
@@ -136,4 +125,13 @@ cp .bash_profile ~/
 
 sudo usermod -aG docker diogo.monica
 
-cd code-server; docker build -t code-server . ; docker run -it --rm --name code-server --security-opt=seccomp:unconfined -p 127.0.0.1:8080:8080 -v $(pwd)/project:/home/diogo.monica/project code-server
+curl https://pyenv.run | bash
+
+echo 'export PATH="$HOME/.pyenv/bin:$PATH"' | tee -a ~/.bashrc
+echo 'eval "$(pyenv init -)"' | tee -a ~/.bashrc
+echo 'eval "$(pyenv virtualenv-init -)"' | tee -a ~/.bashrc
+exec "$SHELL"
+
+pyenv install 3.8.2
+
+cd code-server; sudo docker build -t code-server . ; sudo docker run -d -it --rm --name code-server --security-opt=seccomp:unconfined -p 127.0.0.1:8080:8080 -v $(pwd)/project:/home/diogo.monica/project code-server
