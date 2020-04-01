@@ -24,7 +24,10 @@ if [ ! -e /etc/cron.weekly/cron-apt ]; then
 fi
 
 # Install standard development tools
-sudo apt-get install -y unzip mosh python3-dev cmake zsh git silversearcher-ag build-essential htop psmisc time man-db wget curl virtualenv direnv tmux expect ripgrep docker-ce
+sudo apt-get install -y unzip mosh python3-dev cmake zsh git silversearcher-ag build-essential htop psmisc time man-db wget curl virtualenv direnv tmux expect ripgrep docker-ce libreadline-dev libssl-dev libbz2-dev libsqlite3-dev
+sudo apt-get install -y make build-essential libssl-dev zlib1g-dev \
+libbz2-dev libreadline-dev libsqlite3-dev wget curl llvm libncurses5-dev \
+libncursesw5-dev xz-utils tk-dev libffi-dev liblzma-dev python-openssl
 
 # install x11 libs necessary for supporting gl
 # https://github.com/yarnpkg/yarn/issues/1987
