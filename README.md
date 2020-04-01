@@ -1,5 +1,10 @@
 # dev-box
 
+- Setup new box
+- SSH to new box with vscode-server port-forward: ssh -L 0.0.0.0:8080:localhost:8080 dev
+- git clone this repo
+- cd dev-box; bash dev-box.sh
+
 ## Build the container
 
 > docker build -t code-server .
