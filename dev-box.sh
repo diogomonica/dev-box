@@ -127,9 +127,8 @@ sudo usermod -aG docker diogo.monica
 
 curl https://pyenv.run | bash
 
-echo 'export PATH="$HOME/.pyenv/bin:$PATH"' | tee -a ~/.bashrc
-echo 'eval "$(pyenv init -)"' | tee -a ~/.bashrc
-echo 'eval "$(pyenv virtualenv-init -)"' | tee -a ~/.bashrc
+cp bash_profile $HOME/.bash_profile
+cp bashrc $HOME/.bashrc
 exec "$SHELL"
 
 pyenv install 3.8.2
