@@ -285,4 +285,9 @@ git config --global user.email "diogo.monica@gmail.com"
 
 cp .bash_profile ~/
 
+curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add -
+sudo bash -c 'echo "deb [arch=amd64] https://download.docker.com/linux/ubuntu disco stable" > /etc/apt/sources.list.d/docker-ce.list'
+sudo apt-get update
+sudo apt-get install -y docker-ce
+
 cd code-server; docker build -t code-server . ; docker run -it --rm --name code-server --security-opt=seccomp:unconfined -p 127.0.0.1:8080:8080 -v $(pwd)/project:/home/diogo/project code-server
