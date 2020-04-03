@@ -133,9 +133,10 @@ chmod +x skaffold
 sudo mv skaffold /usr/local/bin
 
 wget https://github.com/cdr/code-server/releases/download/3.0.2/code-server-3.0.2-linux-x86_64.tar.gz && \
-tar -xzf code-server*.tar.gz && \\
+tar -xzf code-server*.tar.gz && \
 rm code-server*.tar.gz && \
-sudo mv code-server-3.0.2-linux-x86_64/code-server /usr/local/lib/code-server && \
+sudo rm -rf /usr/local/lib/code-server && \
+sudo mv code-server-3.0.2-linux-x86_64/ /usr/local/lib/code-server && \
 sudo  ln -s /usr/local/lib/code-server/code-server /usr/local/bin/code-server && \
 rm -rf code-server-3.0.2-linux-x86_64/
 
