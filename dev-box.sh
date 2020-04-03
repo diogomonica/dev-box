@@ -126,6 +126,13 @@ git config --global user.email "diogo.monica@gmail.com"
 
 cp .bash_profile ~/
 
+sudo snap install microk8s --classic --channel=1.18/stable
+
+curl -Lo skaffold https://storage.googleapis.com/skaffold/builds/latest/skaffold-linux-amd64
+chmod +x skaffold
+sudo mv skaffold /usr/local/bin
+
+
 sudo usermod -aG docker diogo.monica
 
 curl https://pyenv.run | bash
