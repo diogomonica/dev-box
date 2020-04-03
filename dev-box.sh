@@ -24,7 +24,7 @@ if [ ! -e /etc/cron.weekly/cron-apt ]; then
 fi
 
 # Install standard development tools
-sudo apt-get install -y unzip mosh python3-dev cmake zsh git silversearcher-ag build-essential htop psmisc time man-db wget curl virtualenv direnv tmux expect ripgrep docker-ce libreadline-dev libssl-dev libbz2-dev libsqlite3-dev
+sudo apt-get install -y unzip mosh python3-dev cmake zsh git silversearcher-ag build-essential htop psmisc time man-db wget curl virtualenv direnv tmux expect ripgrep docker-ce libreadline-dev libssl-dev libbz2-dev libsqlite3-dev net-tools
 sudo apt-get install -y make build-essential libssl-dev zlib1g-dev \
 libbz2-dev libreadline-dev libsqlite3-dev wget curl llvm libncurses5-dev \
 libncursesw5-dev xz-utils tk-dev libffi-dev liblzma-dev python-openssl
@@ -132,6 +132,48 @@ curl -Lo skaffold https://storage.googleapis.com/skaffold/builds/latest/skaffold
 chmod +x skaffold
 sudo mv skaffold /usr/local/bin
 
+  # By default, listen on port 8443
+CODE_SERVER_PORT=8443
+code_server_service_file=/etc/systemd/system/code-server.service
+tmp_code_server_service_file=$(mktemp)
+sudo tee >/dev/null "$tmp_code_server_service_file" <<EOF
+[Unit]
+Description=Anchorage VS Code Server
+After=network.target
+AssertPathExists=/home/diogo.monica/projects
+[Service]
+Type=simple
+Environment=GOPATH=/home/diogo.monica/go
+Environment=PATH=/home/diogo.monica/bin:/home/diogo.monica/.pyenv/plugins/pyenv-virtualenv/shims:/home/diogo.monica/.pyenv/shims:/home/diogo.monica/.pyenv/bin:/home/diogo.monica/.nvm/versions/node/v10.19.0/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/snap/bin:/home/diogo.monica/.go/bin:/home/diogo.monica/go/bin:/home/diogo.monica/.local/bin:/home/diogo.monica/go/bin:/opt/google-cloud-sdk/bin:/home/diogo.monica/.go/bin:/home/diogo.monica/go/bin:/home/diogo.monica/.local/bin
+Environment=GOROOT=/home/diogo.monica/.go
+Environment=GO111MODULE=off
+WorkingDirectory=/home/diogo.monica/projects
+ExecStart=/usr/local/bin/code-server --auth none --disable-telemetry --port 8443 --host 0.0.0.0 .
+User=1001
+Restart=always
+RestartSec=1
+[Install]
+WantedBy=multi-user.target
+EOF
+
+changed=false
+if [ ! -e "$code_server_service_file" ]; then
+    sudo mv "$tmp_code_server_service_file" "$code_server_service_file"
+    changed=true
+else
+    # if the configs have changed replace with the new one
+    diff "$code_server_service_file" "$tmp_code_server_service_file" || {
+      sudo mv -f "$tmp_code_server_service_file" "$code_server_service_file"
+    }
+    changed=true
+fi
+
+if [ "$changed" = "true" ]; then
+    sudo systemctl daemon-reload
+    sudo systemctl stop code-server.service
+    sudo systemctl enable code-server.service
+    sudo systemctl start code-server.service
+fi
 
 sudo usermod -aG docker diogo.monica
 
