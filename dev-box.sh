@@ -132,6 +132,14 @@ curl -Lo skaffold https://storage.googleapis.com/skaffold/builds/latest/skaffold
 chmod +x skaffold
 sudo mv skaffold /usr/local/bin
 
+wget https://github.com/cdr/code-server/releases/download/3.0.2/code-server-3.0.2-linux-x86_64.tar.gz && \
+tar -xzf code-server*.tar.gz && \\
+rm code-server*.tar.gz && \
+sudo mv code-server-3.0.2-linux-x86_64/code-server /usr/local/lib/code-server && \
+sudo  ln -s /usr/local/lib/code-server/code-server /usr/local/bin/code-server && \
+rm -rf code-server-3.0.2-linux-x86_64/
+
+
   # By default, listen on port 8443
 CODE_SERVER_PORT=8443
 code_server_service_file=/etc/systemd/system/code-server.service
@@ -185,4 +193,4 @@ exec "$SHELL"
 
 pyenv install 3.8.2
 
-cd code-server; sudo docker build -t code-server . ; sudo docker run -d -it --rm --name code-server --security-opt=seccomp:unconfined -p 127.0.0.1:8080:8080 -v $(pwd)/project:/home/diogo.monica/project code-server
+#cd code-server; sudo docker build -t code-server . ; sudo docker run -d -it --rm --name code-server --security-opt=seccomp:unconfined -p 127.0.0.1:8080:8080 -v $(pwd)/project:/home/diogo.monica/project code-server
